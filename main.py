@@ -13,8 +13,8 @@ def predict(train, test, predictors, model):
     preds = model.predict_proba(test[predictors])[
         :, 1
     ]  # uses trained model to predict probabilities that the market goes up
-    preds[preds >= 0.65] = 1  # if probability is greater than 0.6, set to 1
-    preds[preds < 0.65] = 0  # if probability is less than 0.6, set to 0
+    preds[preds >= 0.6] = 1  # if probability is greater than 0.6, set to 1
+    preds[preds < 0.6] = 0  # if probability is less than 0.6, set to 0
     preds = pd.Series(
         preds, index=test.index, name="Predictions"
     )  # converts predictions to a series with the same index as the test set
@@ -138,3 +138,13 @@ predictions = backtest(sp500, model, new_predictors)  # backtests the model on t
 
 print(predictions["Predictions"].value_counts())
 print(precision_score(predictions["Target"], predictions["Predictions"]))
+
+
+# --- Make a prediction for the next trading day ---
+model.fit(sp500[new_predictors], sp500["Target"])
+latest_data = sp500.iloc[-1:].copy()
+prob_up = model.predict_proba(latest_data[new_predictors])[:, 1][0]
+prediction = 1 if prob_up >= 0.65 else 0
+
+print(f"Probability S&P500 goes UP on Aug 6, 2025: {prob_up:.2f}")
+print("Final Prediction:", "UP" if prediction == 1 else "DOWN")
