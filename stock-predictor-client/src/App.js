@@ -25,7 +25,7 @@ function App() {
       ) : prediction ? (  //if prediction is true (loading has finished), show prediction message
         <>
           <p><strong>Prediction:</strong> {prediction.prediction}</p>
-          <p><strong>Confidence:</strong> {(prediction.probability * 100).toFixed(2)}%</p>
+          <p><strong>Confidence:</strong> {(prediction.probability * 100).toFixed(2)}% the stock goes up.</p>
         </>
       ) : (  //if prediction is false, show failed to load prediction message
         <p>Failed to load prediction.</p>
